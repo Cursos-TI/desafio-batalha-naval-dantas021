@@ -1,0 +1,71 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define TAMANHO_TABULEIRO 10
+#define TAMANHO_NAVIO 3
+
+int main() {
+    int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO] = {0};
+    int linha, coluna, i;
+    int valido = 0;
+
+    // Inicializa o gerador de números aleatórios
+    srand(time(NULL));
+
+    // Posiciona o navio horizontal
+    while (!valido) {
+        linha = rand() % TAMANHO_TABULEIRO;
+        coluna = rand() % (TAMANHO_TABULEIRO - TAMANHO_NAVIO + 1); // Garante que cabe horizontalmente
+
+        // Verifica sobreposição
+        valido = 1;
+        for (i = 0; i < TAMANHO_NAVIO; i++) {
+            if (tabuleiro[linha][coluna + i] != 0) {
+                valido = 0;
+                break;
+            }
+        }
+
+        // Posiciona se válido
+        if (valido) {
+            for (i = 0; i < TAMANHO_NAVIO; i++) {
+                tabuleiro[linha][coluna + i] = 3;
+            }
+        }
+    }
+
+    // Posiciona o navio vertical
+    valido = 0;
+    while (!valido) {
+        linha = rand() % (TAMANHO_TABULEIRO - TAMANHO_NAVIO + 1); // Garante que cabe verticalmente
+        coluna = rand() % TAMANHO_TABULEIRO;
+
+        // Verifica sobreposição
+        valido = 1;
+        for (i = 0; i < TAMANHO_NAVIO; i++) {
+            if (tabuleiro[linha + i][coluna] != 0) {
+                valido = 0;
+                break;
+            }
+        }
+
+        // Posiciona se válido
+        if (valido) {
+            for (i = 0; i < TAMANHO_NAVIO; i++) {
+                tabuleiro[linha + i][coluna] = 3;
+            }
+        }
+    }
+
+    // Exibe o tabuleiro
+    printf("Tabuleiro (0 = agua, 3 = navio):\n\n");
+    for (int i = 0; i < TAMANHO_TABULEIRO; i++) {
+        for (int j = 0; j < TAMANHO_TABULEIRO; j++) {
+            printf("%d ", tabuleiro[i][j]);
+        }
+        printf("\n");
+    }
+
+    return 0;
+}
